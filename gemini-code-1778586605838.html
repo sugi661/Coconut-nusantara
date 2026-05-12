@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nusantara Coconut Business</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'coco-dark': '#1A120B',
+                        'coco-brown': '#3C2A21',
+                        'coco-light': '#D5CEA3'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #ffffff;
+            color: #1A120B;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .screen {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            min-height: 100vh;
+        }
+        .screen.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Background Animasi Halus di Halaman 1 */
+        .bg-anim {
+            background: linear-gradient(120deg, #ffffff, #f5f5f5, #ffffff);
+            background-size: 200% 200%;
+            animation: gradientBG 5s ease infinite;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes jelly {
+            0%, 100% { transform: scale(1, 1); }
+            30% { transform: scale(1.1, 0.9); }
+            50% { transform: scale(0.9, 1.1); }
+            80% { transform: scale(1.05, 0.95); }
+        }
+        .ngemoy:active { animation: jelly 0.5s both; }
+
+        .btn-primary { background-color: #1A120B; color: white; }
+        .btn-primary:active { transform: scale(0.96); }
+        
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav id="navbar" class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md px-6 py-4 hidden justify-between items-center border-b border-gray-100">
+        <div class="flex flex-col">
+            <span class="font-extrabold text-lg tracking-tighter uppercase">Coconut <span class="text-coco-brown">Nusantara</span></span>
+            <span id="navUser" class="text-[10px] font-bold text-gray-400"></span>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="goBack()" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 border border-gray-100 font-bold">&lt;</button>
+            <button onclick="goForward()" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 border border-gray-100 font-bold">&gt;</button>
+        </div>
+    </nav>
+
+    <section id="view-welcome" class="screen active bg-anim flex-col justify-center items-center p-10 text-center">
+        <h1 class="text-6xl font-extrabold tracking-tighter ngemoy mb-2 text-coco-dark">Welcome</h1>
+        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Calon Pebisnis Kelapa Nusantara</p>
+        <div class="fixed bottom-16">
+            <p class="text-[10px] font-black text-gray-400 animate-pulse uppercase tracking-widest">Klik dua kali untuk lanjut</p>
+        </div>
+    </section>
+
+    <section id="view-edu" class="screen flex-col pt-24 px-6 pb-10">
+        <div id="box-nama" class="space-y-6 mt-10">
+            <h2 class="text-3xl font-extrabold tracking-tight">Siapa nama Anda?</h2>
+            <input type="text" id="userName" placeholder="Nama Anda..." class="w-full text-xl font-bold py-4 border-b-4 border-coco-dark focus:outline-none placeholder-gray-300">
+            <button onclick="saveName()" class="w-full btn-primary py-4 rounded-2xl font-bold">Lanjutkan</button>
+        </div>
+
+        <div id="box-edukasi" class="hidden space-y-6">
+            <div class="space-y-1">
+                <h2 id="teksWelcome" class="text-3xl font-extrabold tracking-tight"></h2>
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Nusantara coconut business</p>
+            </div>
+            
+            <p class="text-sm text-gray-600 font-medium leading-relaxed">Kelapa nusantara memiliki sejarah panjang. Bagi anak muda, ini adalah peluang bisnis yang menjanjikan kemandirian finansial dan menciptakan lapangan kerja.</p>
+
+            <div class="space-y-3">
+                <div class="acc-btn p-4 bg-gray-50 rounded-xl flex justify-between font-bold text-sm" onclick="toggleAcc('acc-a')">a. Potensi bagi anak muda <span>+</span></div>
+                <div id="acc-a" class="hidden px-4 py-2 text-xs text-gray-500">Mendorong kreativitas dan membuka lapangan kerja di desa.</div>
+
+                <div class="acc-btn p-4 bg-gray-50 rounded-xl flex justify-between font-bold text-sm" onclick="toggleAcc('acc-b')">b. Jenis pengolahan <span>+</span></div>
+                <div id="acc-b" class="hidden px-4 py-2 text-xs text-gray-500">Glotok (butiran), Kopra, Santan, hingga arang batok.</div>
+
+                <div class="acc-btn p-4 bg-gray-50 rounded-xl flex justify-between font-bold text-sm" onclick="toggleAcc('acc-c')">c. Strategi berbisnis <span>+</span></div>
+                <div id="acc-c" class="hidden px-4 py-2 text-xs text-gray-500">Bangun relasi dengan petani dan pantau pergerakan harga pasar.</div>
+
+                <div class="acc-btn p-4 bg-gray-50 rounded-xl flex justify-between font-bold text-sm" onclick="toggleAcc('acc-d')">d. Antisipasi harga <span>+</span></div>
+                <div id="acc-d" class="hidden px-4 py-2 text-xs text-gray-500">Simpan stok dalam bentuk kopra saat harga kelapa basah anjlok.</div>
+
+                <div class="acc-btn p-4 bg-gray-50 rounded-xl flex justify-between font-bold text-sm" onclick="toggleAcc('acc-e')">e. Limbah Serabut <span>+</span></div>
+                <div id="acc-e" class="hidden px-4 py-2 text-xs text-gray-500">Bisa diolah jadi cocopeat/fiber. Harga jual kisaran Rp500 - Rp1.000/kg.</div>
+
+                <div class="acc-btn p-4 bg-gray-50 rounded-xl flex justify-between font-bold text-sm" onclick="toggleAcc('acc-f')">f. Pengolahan Batok <span>+</span></div>
+                <div id="acc-f" class="hidden px-4 py-2 text-xs text-gray-500">Bisa dijual utuh atau dijadikan arang. Harga kisaran Rp1.000 - Rp1.500/kg.</div>
+            </div>
+
+            <button onclick="nav('view-menu')" class="w-full btn-primary py-5 rounded-[24px] font-extrabold text-lg shadow-lg">START TO BUSINESS</button>
+            
+            <p class="text-center text-[9px] text-gray-400 font-bold uppercase mt-8">&copy; 2026 Pengalaman Praktisi Bisnis Kelapa</p>
+        </div>
+    </section>
+
+    <section id="view-menu" class="screen flex-col pt-28 px-6 space-y-6">
+        <h2 class="text-3xl font-extrabold tracking-tight mb-2">Pilih Jalur Bisnis</h2>
+        <div onclick="nav('view-tengkulak-1')" class="p-8 rounded-[32px] border border-gray-200 active:bg-gray-50">
+            <div class="text-3xl mb-2">🚚</div>
+            <h3 class="text-xl font-extrabold">Pengepul (Tengkulak)</h3>
+            <p class="text-[10px] text-gray-400 font-bold uppercase mt-1">Kalkulasi Beli & Stok Harian</p>
+        </div>
+        <div onclick="nav('view-kopra-1')" class="bg-coco-dark p-8 rounded-[32px] text-white active:opacity-90">
+            <div class="text-3xl mb-2">🔥</div>
+            <h3 class="text-xl font-extrabold text-white">Olahan Lanjutan</h3>
+            <p class="text-[10px] text-gray-400 font-bold uppercase mt-1">Fokus Produksi Kopra</p>
+        </div>
+    </section>
+
+    <section id="view-tengkulak-1" class="screen flex-col pt-28 px-6 pb-10">
+        <h2 class="text-2xl font-extrabold tracking-tight mb-6">Tahap 1: Harga Jual</h2>
+        <p class="text-xs text-gray-500 mb-4 font-medium">Masukkan harga jual Anda ke tengkulak besar per butir.</p>
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div><label class="text-[10px] font-bold uppercase">Res A</label><input type="number" id="jA" value="3000" class="w-full p-4 bg-gray-50 rounded-xl font-bold"></div>
+            <div><label class="text-[10px] font-bold uppercase">Res B</label><input type="number" id="jB" value="2500" class="w-full p-4 bg-gray-50 rounded-xl font-bold"></div>
+            <div><label class="text-[10px] font-bold uppercase">Res C</label><input type="number" id="jC" value="1500" class="w-full p-4 bg-gray-50 rounded-xl font-bold"></div>
+            <div><label class="text-[10px] font-bold uppercase">Res D</label><input type="number" id="jD" value="800" class="w-full p-4 bg-gray-50 rounded-xl font-bold"></div>
+        </div>
+        <button onclick="prosesHargaJual()" class="w-full btn-primary py-4 rounded-2xl font-bold">Selanjutnya</button>
+    </section>
+
+    <section id="view-tengkulak-2" class="screen flex-col pt-28 px-6 pb-10">
+        <h2 class="text-2xl font-extrabold tracking-tight mb-4">Tahap 2: Harga Beli Petani</h2>
+        <div class="p-5 bg-coco-dark text-white rounded-2xl mb-6">
+            <p class="text-[10px] font-bold uppercase opacity-60 mb-2">Rekomendasi Sistem (Dikurangi Rp900 operasional)</p>
+            <div class="grid grid-cols-2 gap-2 text-sm font-bold" id="rek-harga"></div>
+        </div>
+        <p class="text-xs font-bold mb-3 uppercase">Atau Input Harga Custom:</p>
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <input type="number" id="bA" placeholder="Beli Res A" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl font-bold">
+            <input type="number" id="bB" placeholder="Beli Res B" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl font-bold">
+            <input type="number" id="bC" placeholder="Beli Res C" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl font-bold">
+            <input type="number" id="bD" placeholder="Beli Res D" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl font-bold">
+        </div>
+        <button onclick="nav('view-tengkulak-3')" class="w-full btn-primary py-4 rounded-2xl font-bold">Selanjutnya</button>
+    </section>
+
+    <section id="view-tengkulak-3" class="screen flex-col pt-28 px-6 pb-10">
+        <h2 class="text-2xl font-extrabold tracking-tight mb-6">Tahap 3: Jumlah Barang</h2>
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div><label class="text-[10px] font-bold uppercase">Qty Res A</label><input type="number" id="qA" placeholder="Butir" class="w-full p-4 bg-gray-50 rounded-xl font-bold"></div>
+            <div><label class="text-[10px] font-bold uppercase">Qty Res B</label><input type="number" id="qB" placeholder="Butir" class="w-full p-4 bg-gray-50 rounded-xl font-bold"></div>
+            <div><label class="text-[10px] font-bold uppercase">Qty Res C</label><input type="number" id="qC" placeholder="Butir" class="w-full p-4 bg-gray-50 rounded-xl font-bold"></div>
+            <div><label class="text-[10px] font-bold uppercase">Qty Res D</label><input type="number" id="qD" placeholder="Butir" class="w-full p-4 bg-gray-50 rounded-xl font-bold"></div>
+        </div>
+        <button onclick="generateNota()" class="w-full btn-primary py-5 rounded-[24px] font-black text-lg">KALKULASIKAN</button>
+    </section>
+
+    <section id="view-nota" class="screen flex-col pt-28 px-6 pb-10">
+        <div id="notaArea" class="bg-white p-6 border-2 border-coco-dark rounded-2xl space-y-4 mb-6 shadow-sm relative">
+            <button onclick="hapusNota()" class="absolute top-4 right-4 text-xs font-bold text-red-500 bg-red-50 p-2 rounded-lg">Hapus (Batal)</button>
+            <div class="text-center border-b-2 border-dashed border-gray-200 pb-4">
+                <h4 class="font-extrabold text-xl uppercase tracking-tighter">Nota Pembelian</h4>
+                <p id="n-penjual" class="text-xs font-bold mt-1"></p>
+                <p id="n-waktu" class="text-[10px] font-bold text-gray-400"></p>
+            </div>
+            <div id="n-rincian" class="space-y-2 text-xs font-bold text-gray-600"></div>
+            <div class="pt-4 border-t-2 border-coco-dark flex justify-between items-center">
+                <span class="font-black uppercase">Total Bayar</span>
+                <span id="n-total" class="font-black text-xl text-coco-dark"></span>
+            </div>
+        </div>
+        <div class="flex gap-3">
+            <button onclick="downloadNota()" class="flex-1 py-4 bg-gray-100 rounded-xl font-bold text-[10px] uppercase">Download Gambar</button>
+            <button onclick="simpanKeChart()" class="flex-1 py-4 btn-primary rounded-xl font-bold text-[10px] uppercase">Simpan Data</button>
+        </div>
+    </section>
+
+    <section id="view-chart" class="screen flex-col pt-24 px-6 pb-10">
+        <h2 class="text-3xl font-extrabold tracking-tight mb-6">Produktivitas</h2>
+        
+        <div id="box-signal" class="w-full p-4 bg-gray-50 rounded-[32px] border border-gray-100 mb-6 relative">
+            <p class="text-[10px] font-bold uppercase text-center mb-2">Signal Harian (Total Butir)</p>
+            <canvas id="lineChart"></canvas>
+        </div>
+
+        <div id="box-pie" class="hidden w-full p-4 bg-gray-50 rounded-[32px] border border-gray-100 mb-6 relative">
+            <p class="text-[10px] font-bold uppercase text-center mb-2">Proporsi Res Kelapa</p>
+            <canvas id="pieChart"></canvas>
+            <button onclick="togglePieFormat()" id="btn-pie-format" class="absolute bottom-4 right-4 text-[9px] bg-coco-dark text-white px-2 py-1 rounded">Lihat %</button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mb-8">
+            <button onclick="toggleChartType()" id="btn-toggle-chart" class="py-4 bg-gray-100 rounded-xl font-bold text-xs">Lihat Rekap Data</button>
+            <button onclick="downloadPdf()" class="py-4 border border-coco-dark rounded-xl font-bold text-xs">Unduh PDF/Img</button>
+        </div>
+        
+        <p class="text-center text-[10px] font-bold text-gray-400 italic">"Konsisten pantau stok, jangan sampai kelabakan pas tengkulak nanya."</p>
+    </section>
+
+    <section id="view-kopra-1" class="screen flex-col pt-28 px-6 pb-10">
+        <h2 class="text-3xl font-extrabold tracking-tight mb-4">Raja Olahan: Kopra</h2>
+        <p class="text-sm text-gray-500 font-medium leading-relaxed mb-8">Kopra adalah solusi saat harga kelapa butiran anjlok. Susut berat dari basah ke kering rata-rata 50-55%.</p>
+        <button onclick="nav('view-kopra-2')" class="w-full btn-primary py-5 rounded-[24px] font-extrabold text-lg">START KOPRA</button>
+    </section>
+
+    <section id="view-kopra-2" class="screen flex-col pt-24 px-6 pb-10">
+        <h2 class="text-2xl font-extrabold tracking-tight mb-6">Sumber Data Kelapa</h2>
+        <div class="flex gap-2 mb-6">
+            <button onclick="setKopraSource('diagram')" class="flex-1 py-3 bg-coco-dark text-white rounded-xl text-xs font-bold">Dari Diagram</button>
+            <button onclick="setKopraSource('custom')" class="flex-1 py-3 bg-gray-100 text-coco-dark rounded-xl text-xs font-bold">Custom Stok</button>
+        </div>
+        
+        <div id="kopra-custom-inputs" class="hidden grid grid-cols-2 gap-4 mb-6">
+            <div><label class="text-[10px] font-bold uppercase">Total Res A</label><input type="number" id="k-qA" class="w-full p-3 bg-gray-50 rounded-lg font-bold"></div>
+            <div><label class="text-[10px] font-bold uppercase">Total Res B</label><input type="number" id="k-qB" class="w-full p-3 bg-gray-50 rounded-lg font-bold"></div>
+            <div><label class="text-[10px] font-bold uppercase">Total Res C</label><input type="number" id="k-qC" class="w-full p-3 bg-gray-50 rounded-lg font-bold"></div>
+            <div><label class="text-[10px] font-bold uppercase">Total Res D</label><input type="number" id="k-qD" class="w-full p-3 bg-gray-50 rounded-lg font-bold"></div>
+        </div>
+
+        <button onclick="kalkulasiKopra()" class="w-full btn-primary py-4 rounded-xl font-bold mb-6">Hitung Tonase</button>
+
+        <div id="res-kopra" class="hidden space-y-4">
+            <div class="p-6 bg-gray-50 rounded-2xl border border-gray-100 space-y-3">
+                <div class="flex justify-between text-xs font-bold text-gray-500"><span>Kelapa Basah</span><span id="txt-basah"></span></div>
+                <div class="flex justify-between font-black text-lg"><span>Kopra Kering (-52.5%)</span><span id="txt-kering" class="text-coco-dark"></span></div>
+            </div>
+            <div class="space-y-2 pt-4">
+                <label class="text-[10px] font-bold uppercase">Harga Jual Kopra (Rp/Kg)</label>
+                <div class="flex gap-2">
+                    <input type="number" id="k-hjual" value="11000" class="flex-1 p-3 bg-gray-50 rounded-lg font-bold">
+                    <button onclick="hitungCuanKopra()" class="bg-coco-dark text-white px-4 rounded-lg font-bold text-xs">Total Uang</button>
+                </div>
+                <h3 id="txt-cuan" class="text-2xl font-black text-green-600 mt-2 hidden"></h3>
+            </div>
+            <p class="text-[9px] text-gray-400 font-bold uppercase text-center mt-4">*Harga dan ukuran susut bisa berbeda di tiap daerah.</p>
+        </div>
+    </section>
+
+    <script>
+        // --- Sistem Navigasi ---
+        let historyNav = ['view-welcome'];
+        let userName = localStorage.getItem('coco_name') || '';
+
+        document.getElementById('view-welcome').addEventListener('dblclick', () => {
+            if(userName) { nav('view-menu'); initNav(); }
+            else nav('view-edu');
+        });
+
+        function nav(targetId) {
+            document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display='none'; });
+            const target = document.getElementById(targetId);
+            target.style.display='flex';
+            setTimeout(() => target.classList.add('active'), 10);
+            
+            if(historyNav[historyNav.length-1] !== targetId) historyNav.push(targetId);
+            initNav();
+            window.scrollTo(0,0);
+        }
+
+        function goBack() {
+            if(historyNav.length > 1) {
+                historyNav.pop();
+                const prev = historyNav[historyNav.length-1];
+                nav(prev);
+                historyNav.pop(); // cegah duplikat karena nav() nge-push
+            }
+        }
+        function goForward() { /* Opsional */ }
+
+        function initNav() {
+            const current = historyNav[historyNav.length-1];
+            document.getElementById('navbar').style.display = (current !== 'view-welcome') ? 'flex' : 'none';
+            document.getElementById('navUser').innerText = userName ? `Hai, ${userName}` : '';
+        }
+
+        // --- Fitur Edukasi & Nama ---
+        function saveName() {
+            const input = document.getElementById('userName').value;
+            if(!input) return;
+            userName = input;
+            localStorage.setItem('coco_name', userName);
+            document.getElementById('teksWelcome').innerText = `Welcome ${userName},`;
+            document.getElementById('box-nama').classList.add('hidden');
+            document.getElementById('box-edukasi').classList.remove('hidden');
+            initNav();
+        }
+
+        function toggleAcc(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden');
+        }
+
+        // --- Sistem Tengkulak & Nota ---
+        let dJual = {}, dBeli = {}, dQty = {}, dTempNota = null;
+
+        function prosesHargaJual() {
+            dJual = {
+                a: parseInt(document.getElementById('jA').value)||0,
+                b: parseInt(document.getElementById('jB').value)||0,
+                c: parseInt(document.getElementById('jC').value)||0,
+                d: parseInt(document.getElementById('jD').value)||0
+            };
+            document.getElementById('rek-harga').innerHTML = `
+                <div>Res A: Rp${dJual.a - 900}</div>
+                <div>Res B: Rp${dJual.b - 900}</div>
+                <div>Res C: Rp${dJual.c - 900}</div>
+                <div>Res D: Rp${dJual.d - 900}</div>
+            `;
+            // Isi default custom dengan rekomendasi
+            document.getElementById('bA').value = dJual.a - 900;
+            document.getElementById('bB').value = dJual.b - 900;
+            document.getElementById('bC').value = dJual.c - 900;
+            document.getElementById('bD').value = dJual.d - 900;
+            nav('view-tengkulak-2');
+        }
+
+        function generateNota() {
+            dBeli = {
+                a: parseInt(document.getElementById('bA').value)||0,
+                b: parseInt(document.getElementById('bB').value)||0,
+                c: parseInt(document.getElementById('bC').value)||0,
+                d: parseInt(document.getElementById('bD').value)||0
+            };
+            dQty = {
+                a: parseInt(document.getElementById('qA').value)||0,
+                b: parseInt(document.getElementById('qB').value)||0,
+                c: parseInt(document.getElementById('qC').value)||0,
+                d: parseInt(document.getElementById('qD').value)||0
+            };
+
+            const tA = dQty.a * dBeli.a, tB = dQty.b * dBeli.b, tC = dQty.c * dBeli.c, tD = dQty.d * dBeli.d;
+            const tBayar = tA + tB + tC + tD;
+            
+            document.getElementById('n-penjual').innerText = "Penjual: Petani Kelapa";
+            document.getElementById('n-waktu').innerText = new Date().toLocaleString('id-ID');
+            
+            let rincianHtml = "";
+            if(dQty.a>0) rincianHtml += `<div class="flex justify-between"><span>Res A (${dQty.a})</span><span>Rp${tA.toLocaleString()}</span></div>`;
+            if(dQty.b>0) rincianHtml += `<div class="flex justify-between"><span>Res B (${dQty.b})</span><span>Rp${tB.toLocaleString()}</span></div>`;
+            if(dQty.c>0) rincianHtml += `<div class="flex justify-between"><span>Res C (${dQty.c})</span><span>Rp${tC.toLocaleString()}</span></div>`;
+            if(dQty.d>0) rincianHtml += `<div class="flex justify-between"><span>Res D (${dQty.d})</span><span>Rp${tD.toLocaleString()}</span></div>`;
+            
+            document.getElementById('n-rincian').innerHTML = rincianHtml;
+            document.getElementById('n-total').innerText = "Rp" + tBayar.toLocaleString('id-ID');
+
+            dTempNota = { date: new Date().toLocaleDateString('id-ID'), qtyA: dQty.a, qtyB: dQty.b, qtyC: dQty.c, qtyD: dQty.d, total: dQty.a+dQty.b+dQty.c+dQty.d };
+            nav('view-nota');
+        }
+
+        function hapusNota() { dTempNota = null; nav('view-tengkulak-1'); }
+
+        function downloadNota() {
+            html2canvas(document.getElementById("notaArea")).then(canvas => {
+                let link = document.createElement('a'); link.download = 'nota-kelapa.png'; link.href = canvas.toDataURL(); link.click();
+            });
+        }
+
+        function simpanKeChart() {
+            if(!dTempNota) return;
+            let db = JSON.parse(localStorage.getItem('coco_db') || '[]');
+            db.push(dTempNota);
+            localStorage.setItem('coco_db', JSON.stringify(db));
+            dTempNota = null;
+            nav('view-chart');
+            renderCharts();
+        }
+
+        // --- Sistem Grafik ---
+        let lineChart, pieChart;
+        let isPiePercent = false;
+
+        function renderCharts() {
+            const db = JSON.parse(localStorage.getItem('coco_db') || '[]');
+            
+            // Render Line (Signal)
+            const ctxL = document.getElementById('lineChart').getContext('2d');
+            if(lineChart) lineChart.destroy();
+            lineChart = new Chart(ctxL, {
+                type: 'line',
+                data: {
+                    labels: db.map(x => x.date),
+                    datasets: [{
+                        data: db.map(x => x.total),
+                        borderColor: '#1A120B', borderWidth: 4, tension: 0.3, pointRadius: 2
+                    }]
+                },
+                options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
+            });
+
+            // Render Pie
+            const totA = db.reduce((s,x)=>s+x.qtyA,0), totB = db.reduce((s,x)=>s+x.qtyB,0);
+            const totC = db.reduce((s,x)=>s+x.qtyC,0), totD = db.reduce((s,x)=>s+x.qtyD,0);
+            const ctxP = document.getElementById('pieChart').getContext('2d');
+            if(pieChart) pieChart.destroy();
+            pieChart = new Chart(ctxP, {
+                type: 'doughnut',
+                data: {
+                    labels: ['A', 'B', 'C', 'D'],
+                    datasets: [{ data: [totA, totB, totC, totD], backgroundColor: ['#1A120B', '#3C2A21', '#8A6E59', '#D5CEA3'] }]
+                },
+                options: { plugins: { legend: { position: 'bottom' } } }
+            });
+        }
+
+        function toggleChartType() {
+            const isPie = !document.getElementById('box-pie').classList.contains('hidden');
+            if(isPie) {
+                document.getElementById('box-pie').classList.add('hidden');
+                document.getElementById('box-signal').classList.remove('hidden');
+                document.getElementById('btn-toggle-chart').innerText = "Lihat Rekap Data";
+            } else {
+                document.getElementById('box-pie').classList.remove('hidden');
+                document.getElementById('box-signal').classList.add('hidden');
+                document.getElementById('btn-toggle-chart').innerText = "Lihat Signal";
+            }
+        }
+
+        function togglePieFormat() {
+            isPiePercent = !isPiePercent;
+            document.getElementById('btn-pie-format').innerText = isPiePercent ? "Lihat Jumlah" : "Lihat %";
+            // Implementasi persen butuh kustomisasi tooltip Chart.js, untuk SPA ini kita toggle visual tombolnya dulu.
+        }
+
+        function downloadPdf() {
+            const isPie = !document.getElementById('box-pie').classList.contains('hidden');
+            const canvas = document.getElementById(isPie ? 'pieChart' : 'lineChart');
+            let link = document.createElement('a'); link.download = 'grafik-kelapa.png'; link.href = canvas.toDataURL(); link.click();
+        }
+
+        // --- Sistem Kopra ---
+        let kopraMode = 'diagram';
+        function setKopraSource(mode) {
+            kopraMode = mode;
+            document.getElementById('kopra-custom-inputs').style.display = (mode==='custom') ? 'grid' : 'none';
+        }
+
+        let kKering = 0;
+        function kalkulasiKopra() {
+            let kA=0, kB=0, kC=0, kD=0;
+            if(kopraMode === 'diagram') {
+                const db = JSON.parse(localStorage.getItem('coco_db') || '[]');
+                kA = db.reduce((s,x)=>s+x.qtyA,0); kB = db.reduce((s,x)=>s+x.qtyB,0);
+                kC = db.reduce((s,x)=>s+x.qtyC,0); kD = db.reduce((s,x)=>s+x.qtyD,0);
+            } else {
+                kA = parseInt(document.getElementById('k-qA').value)||0; kB = parseInt(document.getElementById('k-qB').value)||0;
+                kC = parseInt(document.getElementById('k-qC').value)||0; kD = parseInt(document.getElementById('k-qD').value)||0;
+            }
+
+            // Rumus: A&B(0.5kg/btr), C(0.4kg/btr), D(0.25kg/btr)
+            const basah = ((kA+kB)*0.5) + (kC*0.4) + (kD*0.25);
+            kKering = basah * (1 - 0.525); // Susut 52.5%
+
+            document.getElementById('txt-basah').innerText = basah.toFixed(1) + " kg";
+            document.getElementById('txt-kering').innerText = kKering.toFixed(1) + " kg";
+            document.getElementById('res-kopra').classList.remove('hidden');
+        }
+
+        function hitungCuanKopra() {
+            const harga = parseInt(document.getElementById('k-hjual').value)||0;
+            document.getElementById('txt-cuan').innerText = "Rp " + (kKering * harga).toLocaleString('id-ID');
+            document.getElementById('txt-cuan').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
